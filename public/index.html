@@ -1,17 +1,47 @@
 <!DOCTYPE html>
-<html lang="">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="styles.css">
+    <title>Les Bonnes Pièces</title>
+</head>
+<body>
+	<div id="app">
+	  <header>
+		<img src="images/logo-les-bonnes-pieces.png" alt="LOGO" />
+		<h1>Les Bonnes Pièces</h1>
+	  </header>
+	  <main>
+		<section class="filtres">
+		  <h3>Filtres</h3>
+		  <input v-model="searchQuery" placeholder="Rechercher..." />
+		  <select v-model="selectedCategory">
+			<option value="">Toutes les catégories</option>
+			<option v-for="category in categories" :key="category">{{ category }}</option>
+		  </select>
+		  <label>
+			<input type="checkbox" v-model="showAvailableOnly" /> Disponible seulement
+		  </label>
+		  <button @click="sortByPrice('asc')">Trier par prix croissant</button>
+		  <button @click="sortByPrice('desc')">Trier par prix décroissant</button>
+		</section>
+		<section class="fiches">
+		  <div v-for="piece in filteredPieces" :key="piece.id" class="fiche">
+			<img :src="piece.image" :alt="piece.nom" />
+			<h3>{{ piece.nom }}</h3>
+			<p>{{ piece.prix }} €</p>
+			<p>{{ piece.categorie }}</p>
+			<button @click="addToCart(piece)" :disabled="!piece.disponible">Ajouter au panier</button>
+		  </div>
+		</section>
+		<section class="panier">
+		  <h3>Panier</h3>
+		  <ul>
+			<li v-for="item in cart" :key="item.id">{{ item.nom }} - {{ item.prix }} €</li>
+		  </ul>
+		</section>
+	  </main>
+	</div>
+</body>
 </html>
